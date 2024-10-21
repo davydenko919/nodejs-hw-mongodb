@@ -3,8 +3,9 @@ import pino from 'pino-http';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { env } from './utils/env.js';
-import { Contact } from './models/contacts.js';
+// import { Contact } from './models/contacts.js';
 import { getAllContacts } from './controllers/contactsController.js';
+import { routGetContactById } from './controllers/contactsController.js';
 
 dotenv.config();
 
@@ -24,35 +25,9 @@ app.use(
     }),
   );
 
-// app.get('/contacts', async (req, res) => {
-//   try {
-//     const contacts = await Contact.find();
-
-//     res.json(contacts);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
-
 app.get('/contacts', getAllContacts);
 
-app.get('/contacts/:id', async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const contacts = await Contact.findById(id);
-
-    if (contacts === null) {
-      return res.status(404).send('Contact not found');
-    }
-
-    res.json(contacts);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  }
-});
+app.get('/contacts/:id', routGetContactById);
 
 app.use('*', (req, res, next) => {
     res.status(404).json({
