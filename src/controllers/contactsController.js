@@ -1,5 +1,6 @@
 import { getContacts } from '../services/contactsService.js';
 import { getContactById } from '../services/contactsService.js';
+// import mongoose from 'mongoose';
 
 const getAllContacts = async (req, res) => {
   try {
@@ -21,8 +22,16 @@ const getAllContacts = async (req, res) => {
 
 const routGetContactById = async (req, res) => {
     const { id } = req.params;
+
+    // if (!mongoose.Types.ObjectId.isValid(id)) {
+    //   return res.status(404).send('Contact not found');
+    // }
+
     try {
       const contacts = await getContactById(id);
+      if (contacts == null) {
+        return res.status(404).send('Contact not found');
+      }
       res.json({
         status: 200,
         message: `Successfully found contact with id ${id}!`,
@@ -30,11 +39,7 @@ const routGetContactById = async (req, res) => {
       });
     } catch (error) {
       console.error(error);
-      res.status(404).json({
-        status: 404,
-        message: 'Contact not found',
-        error: error.message
-      });
+      res.status(500).send('Internal Server Error');
     }
   };
 
