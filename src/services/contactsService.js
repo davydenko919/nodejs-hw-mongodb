@@ -10,7 +10,6 @@ import { Contact } from '../models/contacts.js';
     return contact;
   };
 
-
   export { getContacts, getContactById };
 
 
