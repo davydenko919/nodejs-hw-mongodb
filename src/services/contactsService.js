@@ -23,24 +23,27 @@ import { Contact } from '../db/models/contacts.js';
     return contact;
   };
 
+
 export const updateContact = async (contactId, payload, options = {}) => {
-  const rawResult = await Contact.findOneAndUpdate(
-    { _id: contactId },
+  const rawResult = await Contact.findByIdAndUpdate(
+    contactId,
     payload,
     {
       new: true,
-      includeResultMetadata: true,
+      upsert: true,
       ...options,
     },
   );
 
-  if (!rawResult || !rawResult.value) return null;
+  if (!rawResult) return null;
 
   return {
-    student: rawResult.value,
-    isNew: Boolean(rawResult?.lastErrorObject?.upserted),
+    student: rawResult,
+    isNew: !rawResult.createdAt || rawResult.createdAt === rawResult.updatedAt,
   };
 };
+
+
 
 
 
