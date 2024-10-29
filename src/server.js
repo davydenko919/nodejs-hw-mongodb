@@ -34,9 +34,9 @@ app.use(
 // app.get('/contacts/:id', routGetContactById);
 app.use('/contacts', contactsRoutes);
 
-app.use('*', notFoundHandler);
+  app.use('*', notFoundHandler);
 
-app.use(errorHandler);
+  app.use(errorHandler);
 
 
 // app.use('*', (req, res, next) => {
