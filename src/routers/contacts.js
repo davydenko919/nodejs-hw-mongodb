@@ -9,7 +9,6 @@ import {
     deleteContactController,
     upsertContactController,
     patchContactController,
-    // updateContactContoller,
 } from '../controllers/contactsController.js';
 
 const router = express.Router();

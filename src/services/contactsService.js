@@ -43,6 +43,25 @@ export const updateContact = async (contactId, payload, options = {}) => {
   };
 };
 
+export const patchContact = async (contactId, payload, options = {}) => {
+  const rawResult = await Contact.findByIdAndUpdate(
+    contactId,
+    payload,
+    {
+      new: true,
+      upsert: false,
+      ...options,
+    },
+  );
+
+  if (!rawResult) return null;
+
+  return {
+    student: rawResult,
+    isNew: !rawResult.createdAt || rawResult.createdAt === rawResult.updatedAt,
+  };
+};
+
 
 
 
