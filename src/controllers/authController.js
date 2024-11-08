@@ -1,0 +1,20 @@
+import {registerUser, loginUser} from "../services/authService.js";
+
+export async function registerController(req, res) {
+    const payload= {
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+    };
+
+    const registeredUser = await registerUser(payload);
+
+    res.send({status: 200, message: "User registred", data: registeredUser });
+}
+
+export async function loginController(req, res){
+    const {email, password} = req.body;
+    await loginUser(email, password);
+
+    res.end();
+}

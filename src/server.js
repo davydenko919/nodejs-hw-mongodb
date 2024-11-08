@@ -7,6 +7,7 @@ import { env } from './utils/env.js';
 // import { getAllContacts } from './controllers/contactsController.js';
 // import { routGetContactById } from './controllers/contactsController.js';
 import contactsRoutes from './routers/contacts.js';
+import authRoutes from "./routers/auth.js";
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
@@ -28,8 +29,11 @@ app.use(
       },
     }),
   );
-
+  
 app.use('/contacts', contactsRoutes);
+
+app.use('/auth', authRoutes);
+
 
 app.use('*', notFoundHandler);
 
