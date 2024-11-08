@@ -1,6 +1,8 @@
 import { User } from "../db/models/user.js";
+import { Session } from "../db/models/Session.js";
 import createHttpError from "http-errors";
 import bcrypt from "bcrypt";
+import crypto from "node:crypto";
 
 export async function registerUser(payload){
    const user = await User.findOne({email: payload.email});
@@ -28,4 +30,17 @@ export async function loginUser(email, password) {
      // throw createHttpError(401, "Unauthorized");
      throw createHttpError(401, 'Email or password is incorrect');
    }
+
+   Session.deleteOne({userId: user._id});
+
+   const accessToken = crypto.randomBytes(30).toString('base64');
+   const refreshToken = crypto.randomBytes(30).toString('base64');
+
+   return Session.create({
+      userId: user._id,
+      accessToken,
+      refreshToken,
+      accessTokenValidUntil: new Date(Date.now() + 15 * 60 * 1000),
+      refreshTokenValidUntil: new Date(Date.now() + 24 * 60 * 60 * 1000),
+    });
 }

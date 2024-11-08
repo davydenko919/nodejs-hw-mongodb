@@ -14,7 +14,7 @@ export async function registerController(req, res) {
 
 export async function loginController(req, res){
     const {email, password} = req.body;
-    await loginUser(email, password);
+    const session = await loginUser(email, password);
 
-    res.end();
+    res.send(session);
 }
