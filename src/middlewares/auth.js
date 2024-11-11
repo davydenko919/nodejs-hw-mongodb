@@ -1,5 +1,5 @@
 import createHttpError from 'http-errors';
-import { Session } from '../db/models/Session.js';
+import { Session } from '../db/models/session.js';
 import { User } from '../db/models/user.js';
 
 export async function auth(req, res, next) {
