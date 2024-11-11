@@ -10,8 +10,9 @@ export const getAllContacts = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query);
   const filter = parseFilterParams(req.query);
-
-  const contacts = await getContacts({ page, perPage, sortBy, sortOrder, filter });
+  const { user: { id: userId } } = req;
+  
+  const contacts = await getContacts({ userId, page, perPage, sortBy, sortOrder, filter });
   res.json({
     status: 200,
     message: "Successfully found contacts!",
@@ -25,7 +26,12 @@ export const routGetContactById = async (req, res, next) => {
   const contact = await getContactById(id);
 
   if (contact === null) {
-    return next(new createHttpError(404, 'Student not found'));
+    return next(new createHttpError(404, 'contact not found'));
+  }
+
+  if (contact.userId.toString() !== req.user.id.toString()) {
+  
+    return next(new createHttpError.NotFound('contsct not your:('));
   }
 
   res.json({
@@ -36,12 +42,15 @@ export const routGetContactById = async (req, res, next) => {
 };
 
 export const createContactController = async (req, res) => {
+
+  console.log(req.user.id);
   const contact = {
     name: req.body.name,
     phoneNumber: req.body.phoneNumber,
     email: req.body.email,
     isFavourite: req.body.isFavourite,
     contactType: req.body.contactType,
+    userId: req.user.id,
   };
 
   const resault = await createContact(contact);

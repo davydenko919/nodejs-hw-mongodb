@@ -5,12 +5,15 @@ import { SORT_ORDER } from '../constants/index.js';
 
 
   const getContacts = async ({
+    userId,
     page = 1,
     perPage = 10,
     sortOrder = SORT_ORDER.ASC,
     sortBy = '_id',
     filter = {},
   }) => {
+
+    
     const limit = perPage;
     const skip = (page - 1) * perPage;
 
@@ -20,6 +23,8 @@ import { SORT_ORDER } from '../constants/index.js';
     if (filter.isFavourite) {
       contactsQuery.where('isFavourite').equals(filter.isFavourite);
     }
+
+    contactsQuery.where('userId').equals(userId);
 
     const [contactsCount, contacts] = await Promise.all([
       Contact.find()

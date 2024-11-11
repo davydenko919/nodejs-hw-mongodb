@@ -10,7 +10,8 @@ import contactsRoutes from './routers/contacts.js';
 import authRoutes from "./routers/auth.js";
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
-import cookieParser from "cookie-parser";
+import { auth } from './middlewares/auth.js';
+import cookieParser from 'cookie-parser';
 
 
 dotenv.config();
@@ -34,7 +35,7 @@ app.use(
 
 app.use(cookieParser());
 
-app.use('/contacts', contactsRoutes);
+app.use('/contacts', auth, contactsRoutes);
 
 app.use('/auth', authRoutes);
 
