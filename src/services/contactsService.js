@@ -41,8 +41,8 @@ import { SORT_ORDER } from '../constants/index.js';
     };
   };
 
-  const getContactById = async (id) => {
-    const contact = await Contact.findById(id);
+  const getContactById = async (id, userId) => {
+    const contact = await Contact.findOne({ _id: id, userId });
     return contact;
   };
 
@@ -51,18 +51,16 @@ import { SORT_ORDER } from '../constants/index.js';
     return contact;
   };
 
-  export const deleteContact = async (contactId) => {
-    const contact = await Contact.findOneAndDelete({
-      _id: contactId,
-    });
+  export const deleteContact = async (contactId, userId) => {
+    const contact = await Contact.findOneAndDelete({ _id: contactId, userId });
 
     return contact;
   };
 
 
-export const updateContact = async (contactId, payload, options = {}) => {
-  const rawResult = await Contact.findByIdAndUpdate(
-    contactId,
+export const updateContact = async (id, userId, payload, options = {}) => {
+  const rawResult = await Contact.findOneAndUpdate(
+    { _id: id, userId: userId },
     payload,
     {
       new: true,
