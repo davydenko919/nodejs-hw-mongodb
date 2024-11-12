@@ -1,4 +1,4 @@
-// import createHttpError from 'http-errors';
+import createHttpError from 'http-errors';
 import { registerUser, loginUser, logoutUser, refreshSession } from '../services/authService.js';
 
 export async function registerController(req, res) {
@@ -38,6 +38,12 @@ export async function loginController(req, res) {
 
 export async function logoutController(req, res) {
     const { sessionId } = req.cookies;
+    console.log(req);
+
+    if (sessionId == null){
+      throw createHttpError(401, "Logout failed: You are not logged in");
+    }
+
     if (typeof sessionId === "string"){
       await logoutUser(sessionId);
     }
