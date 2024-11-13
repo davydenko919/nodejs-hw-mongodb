@@ -78,7 +78,7 @@ export const updateContact = async (id, userId, payload, options = {}) => {
 };
 
 export const patchContact = async (id, userId, payload, options = {}) => {
-  const rawResult = await Contact.findByIdAndUpdate(
+  const rawResult = await Contact.findOneAndUpdate(
     { _id: id, userId: userId },
     payload,
     {
