@@ -1,5 +1,5 @@
 import createHttpError from 'http-errors';
-import { registerUser, loginUser, logoutUser, refreshSession } from '../services/authService.js';
+import { registerUser, loginUser, logoutUser, refreshSession, requestResetToken } from '../services/authService.js';
 
 export async function registerController(req, res) {
   const payload = {
@@ -76,4 +76,15 @@ export async function refreshController(req, res) {
       accessToken: session.accessToken,
     },
   });
-}
+};
+
+export const requestResetEmailController = async (req, res) => {
+  // console.log(req.body);
+  
+  await requestResetToken(req.body.email);
+  res.json({
+    message: 'Reset password email was successfully sent!',
+    status: 200,
+    data: {},
+  });
+};

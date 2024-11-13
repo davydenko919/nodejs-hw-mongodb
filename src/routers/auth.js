@@ -5,9 +5,14 @@ import {
   loginController,
   logoutController,
   refreshController,
+  requestResetEmailController
 } from '../controllers/authController.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { registerSchema, loginSchema } from '../validation/auth.js';
+
+import { requestResetEmailSchema } from '../validation/auth.js';
+
+
 
 const authRouter = express.Router();
 const jsonParser = express.json();
@@ -34,6 +39,13 @@ authRouter.post(
 authRouter.post(
   '/refresh',
   ctrlWrapper(refreshController),
+);
+
+authRouter.post(
+  '/request-reset-email',
+  jsonParser,
+  validateBody(requestResetEmailSchema),
+  ctrlWrapper(requestResetEmailController),
 );
 
 
