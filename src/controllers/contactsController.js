@@ -4,14 +4,17 @@ import createHttpError from 'http-errors';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { env } from '../utils/env.js';
 
 export const getAllContacts = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query);
   const filter = parseFilterParams(req.query);
   const { user: { id: userId } } = req;
-  
+
   const contacts = await getContacts({ userId, page, perPage, sortBy, sortOrder, filter });
   res.json({
     status: 200,
@@ -30,7 +33,7 @@ export const routGetContactById = async (req, res, next) => {
   }
 
   if (contact.userId.toString() !== req.user.id.toString()) {
-  
+
     return next(new createHttpError.NotFound('contsct not your:('));
   }
 
@@ -43,7 +46,18 @@ export const routGetContactById = async (req, res, next) => {
 
 export const createContactController = async (req, res) => {
 
-  console.log(req.user.id);
+  const photo = req.file;
+
+  let photoUrl;
+
+  if (photo) {
+    if (env('ENABLE_CLOUDINARY') === 'true') {
+      photoUrl = await saveFileToCloudinary(photo);
+    } else {
+      photoUrl = await saveFileToUploadDir(photo);
+    }
+  }
+
   const contact = {
     name: req.body.name,
     phoneNumber: req.body.phoneNumber,
@@ -51,6 +65,7 @@ export const createContactController = async (req, res) => {
     isFavourite: req.body.isFavourite,
     contactType: req.body.contactType,
     userId: req.user.id,
+    photo: photoUrl,
   };
 
   const resault = await createContact(contact);
@@ -78,6 +93,20 @@ export const deleteContactController = async (req, res, next) => {
 export const upsertContactController = async (req, res, next) => {
   const { id } = req.params;
   const { user: { id: userId } } = req;
+
+  const photo = req.file;
+
+  let photoUrl;
+
+  if (photo) {
+    if (env('ENABLE_CLOUDINARY') === 'true') {
+      photoUrl = await saveFileToCloudinary(photo);
+    } else {
+      photoUrl = await saveFileToUploadDir(photo);
+    }
+  }
+
+
   const result = await updateContact(
     id, userId,
     {
@@ -86,6 +115,7 @@ export const upsertContactController = async (req, res, next) => {
       email: req.body.email,
       isFavourite: req.body.isFavourite,
       contactType: req.body.contactType,
+      photo: photoUrl,
     },
     {
     upsert: true,
@@ -102,16 +132,59 @@ export const upsertContactController = async (req, res, next) => {
   res.status(status).json({
     status,
     message: `Successfully upserted a contact!`,
-    data: result.student,
+    data: result.contact,
   });
 };
+
+
+// export const patchContactController = async (req, res, next) => {
+//   const { id } = req.params;
+//   const { user: { id: userId } } = req;
+
+
+//   const photo = req.file;
+//   console.log(photo);
+
+//   let photoUrl;
+
+//   if (photo) {
+//     photoUrl = await saveFileToUploadDir(photo);
+//   }
+
+//   const result = await patchContact(id, userId, {...req.body, photo: photoUrl, } );
+
+//   if (result === null) {
+//     next(createHttpError(404, 'Contact not found'));
+
+//     return;
+//   }
+
+//   res.json({
+//     status: 200,
+//     message: `Successfully patched a contact!`,
+//     data: result.contact,
+//   });
+// };
 
 
 export const patchContactController = async (req, res, next) => {
   const { id } = req.params;
   const { user: { id: userId } } = req;
 
-  const result = await patchContact(id, userId, req.body);
+
+  const photo = req.file;
+
+  let photoUrl;
+
+  if (photo) {
+    if (env('ENABLE_CLOUDINARY') === 'true') {
+      photoUrl = await saveFileToCloudinary(photo);
+    } else {
+      photoUrl = await saveFileToUploadDir(photo);
+    }
+  }
+
+  const result = await patchContact(id, userId, {...req.body, photo: photoUrl, } );
 
   if (result === null) {
     next(createHttpError(404, 'Contact not found'));
@@ -122,6 +195,6 @@ export const patchContactController = async (req, res, next) => {
   res.json({
     status: 200,
     message: `Successfully patched a contact!`,
-    data: result.student,
+    data: result.contact,
   });
 };
