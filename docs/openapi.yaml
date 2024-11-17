@@ -14,7 +14,7 @@ tags:
     description: Auth operations.
 servers:
   - url: http://localhost:8080
-  # - url: https://example.com/api/v1
+  - url: https://nodejs-hw-mongodb-3-c2jd.onrender.com
 paths:
   /contacts:
     post:
