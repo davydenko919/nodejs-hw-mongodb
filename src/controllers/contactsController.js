@@ -48,7 +48,7 @@ export const createContactController = async (req, res) => {
 
   const photo = req.file;
 
-// console.log(photo);
+ console.log(photo);
 
 
   let photoUrl;
