@@ -48,9 +48,6 @@ export const createContactController = async (req, res) => {
 
   const photo = req.file;
 
- console.log(photo);
-
-
   let photoUrl;
 
   if (photo) {
@@ -98,7 +95,6 @@ export const upsertContactController = async (req, res, next) => {
   const { user: { id: userId } } = req;
 
   const photo = req.file;
-
 
   let photoUrl;
 
@@ -175,9 +171,7 @@ export const patchContactController = async (req, res, next) => {
   const { id } = req.params;
   const { user: { id: userId } } = req;
 
-
   const photo = req.file;
-
 
   let photoUrl;
 
