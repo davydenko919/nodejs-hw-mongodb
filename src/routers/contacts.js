@@ -32,8 +32,11 @@ router.get('/:id', isValidId, ctrlWrapper(routGetContactById));
 
 router.post(
   '/',
+
   jsonParser,
+
   upload.single('file'),
+
   validateBody(createContactsSchema),
   ctrlWrapper(createContactController),
 );
@@ -51,9 +54,12 @@ router.put(
 
 router.patch(
   '/:id',
+
   isValidId,
   jsonParser,
+
   upload.single('file'),
+
   validateBody(updateContactsSchema),
   ctrlWrapper(patchContactController),
 );

@@ -48,6 +48,9 @@ export const createContactController = async (req, res) => {
 
   const photo = req.file;
 
+// console.log(photo);
+
+
   let photoUrl;
 
   if (photo) {
@@ -95,6 +98,7 @@ export const upsertContactController = async (req, res, next) => {
   const { user: { id: userId } } = req;
 
   const photo = req.file;
+
 
   let photoUrl;
 
@@ -174,6 +178,7 @@ export const patchContactController = async (req, res, next) => {
 
   const photo = req.file;
 
+
   let photoUrl;
 
   if (photo) {
@@ -184,7 +189,19 @@ export const patchContactController = async (req, res, next) => {
     }
   }
 
-  const result = await patchContact(id, userId, {...req.body, photo: photoUrl, } );
+  const contact = {
+    name: req.body.name,
+    phoneNumber: req.body.phoneNumber,
+    email: req.body.email,
+    isFavourite: req.body.isFavourite,
+    contactType: req.body.contactType,
+    userId: req.user.id,
+    photo: photoUrl,
+  };
+
+  const result = await patchContact(id, userId, contact );
+
+  // const result = await patchContact(id, userId, {...req.body, photo: photoUrl, } );
 
   if (result === null) {
     next(createHttpError(404, 'Contact not found'));

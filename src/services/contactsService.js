@@ -13,7 +13,7 @@ import { SORT_ORDER } from '../constants/index.js';
     filter = {},
   }) => {
 
-    
+
     const limit = perPage;
     const skip = (page - 1) * perPage;
 
@@ -72,7 +72,7 @@ export const updateContact = async (id, userId, payload, options = {}) => {
   if (!rawResult) return null;
 
   return {
-    student: rawResult,
+    contact: rawResult,
     isNew: !rawResult.createdAt || rawResult.createdAt === rawResult.updatedAt,
   };
 };
@@ -91,7 +91,7 @@ export const patchContact = async (id, userId, payload, options = {}) => {
   if (!rawResult) return null;
 
   return {
-    student: rawResult,
+    contact: rawResult,
     isNew: !rawResult.createdAt || rawResult.createdAt === rawResult.updatedAt,
   };
 };
