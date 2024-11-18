@@ -35,7 +35,7 @@ router.post(
 
   jsonParser,
 
-  upload.single('avatar'),
+  upload.single('photo'),
 
   validateBody(createContactsSchema),
   ctrlWrapper(createContactController),
@@ -47,7 +47,7 @@ router.put(
   '/:id',
   isValidId,
   jsonParser,
-  upload.single('avatar'),
+  upload.single('photo'),
   validateBody(updateContactsSchema),
   ctrlWrapper(upsertContactController),
 );
@@ -58,7 +58,7 @@ router.patch(
   isValidId,
   jsonParser,
 
-  upload.single('avatar'),
+  upload.single('photo'),
 
   validateBody(updateContactsSchema),
   ctrlWrapper(patchContactController),

@@ -40,17 +40,17 @@ requestBody:
             enum: ['work', 'home', 'personal']
             default: 'personal'
             example: 'work'
-          userId:
-            description: "ID of the user associated with the contact"
-            type: string
-            example: '65e4decdd286b30065d54af9'
-          avatar:
+          # userId:
+          #   description: "ID of the user associated with the contact"
+          #   type: string
+          #   example: '65e4decdd286b30065d54af9'
+          photo:
             description: "Contact's photo"
             type: string
             format: binary
 responses:
-  '201':
-    description: Successfully created a contact
+  '200':
+    description: Successfully patched a contact
     content:
       application/json:
         schema:
@@ -62,12 +62,14 @@ responses:
           properties:
             status:
               type: integer
-              example: 201
+              example: 200
             message:
               type: string
-              example: Successfully created a contact!
+              example: Successfully patched a contact!!
             data:
               type: object
               $ref: '../../../components/schemas/contact.yaml'
   '401':
     $ref: '../../../components/responses/401.yaml'
+  '404':
+    $ref: '../../../components/responses/404.yaml'

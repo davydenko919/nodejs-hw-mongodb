@@ -12,6 +12,9 @@
   "servers": [
     {
       "url": "http://localhost:8080"
+    },
+    {
+      "url": "https://nodejs-hw-mongodb-3-c2jd.onrender.com"
     }
   ],
   "tags": [
@@ -46,8 +49,7 @@
                 "required": [
                   "name",
                   "phoneNumber",
-                  "contactType",
-                  "userId"
+                  "contactType"
                 ],
                 "properties": {
                   "name": {
@@ -81,12 +83,7 @@
                     "default": "personal",
                     "example": "work"
                   },
-                  "userId": {
-                    "description": "ID of the user associated with the contact",
-                    "type": "string",
-                    "example": "65e4decdd286b30065d54af9"
-                  },
-                  "avatar": {
+                  "photo": {
                     "description": "Contact's photo",
                     "type": "string",
                     "format": "binary"
@@ -126,6 +123,9 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
           "401": {
             "$ref": "#/components/responses/401"
           }
@@ -136,7 +136,7 @@
           "Contacts"
         ],
         "summary": "Get list of contacts",
-        "operationId": "getStudents",
+        "operationId": "getAllContacts",
         "description": "Retrieve a paginated list of contacts with optional filters.",
         "security": [
           {
@@ -191,7 +191,11 @@
               "type": "string",
               "enum": [
                 "true",
-                "false"
+                "1",
+                "yes",
+                "false",
+                "0",
+                "no"
               ]
             },
             "example": "true",
@@ -200,7 +204,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successfully found students!",
+            "description": "Successfully found contacts!",
             "content": {
               "application/json": {
                 "schema": {
@@ -269,7 +273,7 @@
             }
           },
           "400": {
-            "description": "Invalid query parameters.",
+            "description": "Bad Request.",
             "content": {
               "application/json": {
                 "schema": {
@@ -289,6 +293,9 @@
             }
           },
           "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
             "$ref": "#/components/responses/401"
           }
         }
@@ -333,7 +340,15 @@
                   "properties": {
                     "status": {
                       "type": "integer",
-                      "example": 204
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found contact with id 1391487148914!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/contact"
                     }
                   }
                 }
@@ -345,6 +360,9 @@
           },
           "401": {
             "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
           }
         }
       },
@@ -408,12 +426,7 @@
                     "default": "personal",
                     "example": "work"
                   },
-                  "userId": {
-                    "description": "ID of the user associated with the contact",
-                    "type": "string",
-                    "example": "65e4decdd286b30065d54af9"
-                  },
-                  "avatar": {
+                  "photo": {
                     "description": "Contact's photo",
                     "type": "string",
                     "format": "binary"
@@ -424,8 +437,8 @@
           }
         },
         "responses": {
-          "201": {
-            "description": "Successfully created a contact",
+          "200": {
+            "description": "Successfully patched a contact",
             "content": {
               "application/json": {
                 "schema": {
@@ -438,11 +451,11 @@
                   "properties": {
                     "status": {
                       "type": "integer",
-                      "example": 201
+                      "example": 200
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully created a contact!"
+                      "example": "Successfully patched a contact!!"
                     },
                     "data": {
                       "type": "object",
@@ -455,6 +468,9 @@
           },
           "401": {
             "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
           }
         }
       },
@@ -487,6 +503,12 @@
           },
           "400": {
             "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
           }
         }
       }
@@ -556,6 +578,21 @@
             "description": "Link to contact's photo",
             "type": "string",
             "example": "https://res.cloudinary.com/dnepourus/image/upload/image.png"
+          },
+          "createdAt": {
+            "description": "createdAt",
+            "type": "string",
+            "example": "2024-11-18T10:56:58.585Z"
+          },
+          "updatedAt": {
+            "description": "updatedAt",
+            "type": "string",
+            "example": "2024-11-18T10:57:48.452Z"
+          },
+          "__v": {
+            "description": "version",
+            "type": "string",
+            "example": 0
           }
         }
       }
@@ -627,6 +664,43 @@
                     "message": {
                       "type": "string",
                       "example": "Access token expired"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Contact not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 404
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Contact not found"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Contact not found"
                     }
                   }
                 }

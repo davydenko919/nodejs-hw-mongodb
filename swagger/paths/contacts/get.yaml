@@ -1,7 +1,7 @@
 tags:
   - Contacts
 summary: Get list of contacts
-operationId: getStudents
+operationId: getAllContacts
 description: 'Retrieve a paginated list of contacts with optional filters.'
 security:
   - bearerAuth: []
@@ -35,12 +35,12 @@ parameters:
     name: isFavourite
     schema:
       type: string
-      enum: ['true', 'false' ]
+      enum: ['true', '1', 'yes','false', '0', 'no' ]
     example: 'true'
     description: 'Filter contacts by favourite.'
 responses:
   '200':
-    description: Successfully found students!
+    description: Successfully found contacts!
     content:
       application/json:
         schema:
@@ -92,7 +92,7 @@ responses:
   '401':
     $ref: '../../components/responses/401.yaml'
   '400':
-    description: Invalid query parameters.
+    description: Bad Request.
     content:
       application/json:
         schema:
@@ -104,3 +104,5 @@ responses:
             message:
               type: string
               example: Invalid query parameters provided.
+  '404':
+    $ref: '../../components/responses/401.yaml'

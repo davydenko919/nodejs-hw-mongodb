@@ -41,3 +41,15 @@ properties:
     description: "Link to contact's photo"
     type: string
     example: https://res.cloudinary.com/dnepourus/image/upload/image.png
+  createdAt:
+    description: "createdAt"
+    type: string
+    example: "2024-11-18T10:56:58.585Z"
+  updatedAt:
+    description: "updatedAt"
+    type: string
+    example: "2024-11-18T10:57:48.452Z"
+  __v:
+    description: "version"
+    type: string
+    example: 0
